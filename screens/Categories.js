@@ -37,7 +37,7 @@ export default function CategoriesScreen({ navigation, route }) {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.card}
-                        onPress={() => navigation.navigate("RecipesList", { category: item.name })}
+                        onPress={() => navigation.navigate("RecipeDetails", { mealId: item.idMeal })}
                     >
                         <Image source={{ uri: item.strMealThumb }} style={styles.image} />
                         <Text style={styles.text}>{item.strMeal}</Text>
