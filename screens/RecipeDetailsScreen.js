@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     overflow: "hidden",
-    marginBottom: 40,
+    marginBottom: 70,
   },
   video: {
     flex: 1,

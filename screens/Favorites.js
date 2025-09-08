@@ -8,7 +8,7 @@ export default function FavoritesScreen({ navigation }) {
     if (!favorites || favorites.length === 0) {
         return (
             <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>No tienes favoritos aún.</Text>
+                <Text style={styles.emptyText}>You don't have any favorites yet.</Text>
             </View>
         );
     }
