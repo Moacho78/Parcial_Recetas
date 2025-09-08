@@ -64,7 +64,7 @@ export default function RecipesScreen({ navigation }) {
   const renderMeal = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate("Detalle", { meal: item })}
+      onPress={() => navigation.navigate("RecipeDetails", { mealId: item.idMeal })}
     >
       <Image source={{ uri: item.strMealThumb }} style={styles.image} />
       <View style={styles.overlay}>
