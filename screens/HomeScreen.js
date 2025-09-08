@@ -102,7 +102,15 @@ export default function RecipesScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Recipes</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Recipes</Text>
+
+        <View style={styles.randomWrapper}>
+          <TouchableOpacity style={styles.randomButton} onPress={() => navigation.navigate("Favorite")}>
+            <Ionicons name="star" size={18} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       {/* Buscador */}
       <TextInput
@@ -159,11 +167,31 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 10,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+  },
   header: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: "bold",
     marginVertical: 15,
-    textAlign: "center",
+    textAlign: "left",
+  },
+  randomWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  randomButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#ff6347',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   subHeader: {
     fontSize: 20,
