@@ -1,5 +1,6 @@
 // RecipesScreen.js
 import React, { useEffect, useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import {
   View,
   Text,
@@ -8,14 +9,16 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
-  TextInput,
+  TextInput
 } from "react-native";
+
 
 export default function RecipesScreen({ navigation }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [random, setRandom] = useState([]);
 
   const searchMeals = () => {
     if (!query) return;
@@ -80,6 +83,22 @@ export default function RecipesScreen({ navigation }) {
       </View>
     );
   }
+  // Generar receta random
+  const randomRecipe = async () => {
+    try {
+      const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+      const data = await response.json();
+
+      const meal = data.meals[0]; // ⬅️ accede al primer elemento
+      setRandom(meal); // ⬅️ guarda la receta en estado
+
+      // Ahora navega cuando ya tienes el idMeal disponible
+      navigation.navigate("RecipeDetails", { mealId: meal.idMeal });
+
+    } catch (error) {
+      console.error("Error al obtener receta aleatoria:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -97,7 +116,16 @@ export default function RecipesScreen({ navigation }) {
       {/* Resultados de búsqueda */}
       {results.length > 0 ? (
         <>
-          <Text style={styles.subHeader}>Resultados</Text>
+          <View style={styles.resultsHeader}>
+            <Text style={styles.subHeader}>Resultados</Text>
+            <TouchableOpacity onPress={() => {
+              setResults([]);  // Limpia los resultados
+              setQuery('');     // Limpia la barra de búsqueda
+            }}>
+              <Ionicons name="close" size={28} color="#ff6347" />
+            </TouchableOpacity>
+          </View>
+
           <FlatList
             data={results}
             keyExtractor={(item) => item.idMeal}
@@ -117,6 +145,10 @@ export default function RecipesScreen({ navigation }) {
         renderItem={renderCategory}
         showsVerticalScrollIndicator={false}
       />
+      {/* FAB - Floating Action Button */}
+      <TouchableOpacity style={styles.fab} onPress={randomRecipe}>
+        <Ionicons name="dice" size={28} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -137,6 +169,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
+  },
+  resultsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  closeButton: {
+    fontSize: 20,
+    color: '#ff6347',
+    paddingHorizontal: 10,
+    fontWeight: 'bold',
   },
   card: {
     marginBottom: 15,
@@ -180,4 +225,31 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
   },
+  randomWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  randomText: {
+    marginTop: 4,
+    fontSize: 12,
+    fontWeight: "bold",
+    color: '#333',
+  },
+  fab: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#ff6347', // 
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 }
+  }
 });
