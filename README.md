@@ -1,6 +1,6 @@
 # 🍽️ GastroGo
 
-GastroGo es una aplicación móvil desarrollada con **React Native + Expo**, que permite descubrir, consultar y guardar recetas de forma sencilla.
+GastroGo es una aplicación móvil desarrollada con **React Native + Expo + API TheMealDB**, que permite descubrir, consultar y guardar recetas de forma sencilla.
 
 ## Características
 
