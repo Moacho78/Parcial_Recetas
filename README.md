@@ -52,11 +52,11 @@ npm install @react-native-async-storage/async-storage
 npm install react-native-webview
 ```
 
-- Nota:
+Nota:
 
-La instalación de @react-native-async-storage/async-storage es muy probable que sea necesaria.
+- La instalación de @react-native-async-storage/async-storage es muy probable que sea necesaria.
 
-La de react-native-webview solo si el proyecto lo requiere o si aparecen errores.
+- La de react-native-webview solo si el proyecto lo requiere o si aparecen errores.
 
 5. Inicia la app en modo desarrollo:
 
@@ -65,7 +65,7 @@ npx expo start
 ```
 
 6. Escanea el QR con Expo Go:
-Abre la app Expo Go en tu celular y escanea el código QR que aparece en la terminal o en la interfaz web de Expo para ver la aplicación en tu dispositivo.
+ - Abre la app Expo Go en tu celular y escanea el código QR que aparece en la terminal o en la interfaz web de Expo para ver la aplicación en tu dispositivo.
 
 
 
