@@ -30,7 +30,7 @@ npm -v
 1. **Clona el repositorio:**
 
 ```bash
-git clone https://github.com/tu-usuario/gastrogo.git
+https://github.com/Moacho78/Parcial_Recetas.git
 
 ```
 2. Ingresa a la carpeta del proyecto:
