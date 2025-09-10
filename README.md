@@ -45,20 +45,13 @@ cd gastrogo
 npm install
 ```
 
-4. Instala dependencias adicionales si es necesario:
-
-```bash
-npm install @react-native-async-storage/async-storage
-npm install react-native-webview
-```
-
 Nota:
 
 - La instalación de @react-native-async-storage/async-storage es muy probable que sea necesaria.
 
 - La de react-native-webview solo si el proyecto lo requiere o si aparecen errores.
 
-5. Inicia la app en modo desarrollo:
+4. Inicia la app en modo desarrollo:
 
 ```bash
 npx expo start
