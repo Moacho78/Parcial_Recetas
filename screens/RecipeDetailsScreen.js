@@ -7,20 +7,38 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  TextInput,
+  Alert
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { FavoritesContext } from "../context/FavoritesContext";
+import { addComentario } from "../services/services";
+import { filterComentariosPorReceta } from "../services/services"
+import { serverTimestamp } from 'firebase/firestore';
 
 export default function RecipeDetails({ route }) {
   const { mealId } = route.params;
   const [meal, setMeal] = useState(null);
   const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
+  const [commentText, setCommentText] = useState('');
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
       .then((res) => res.json())
       .then((data) => setMeal(data.meals[0]));
   }, [mealId]);
+
+  useEffect(() => {
+    if (!meal) return; // Asegurar que meal no sea null antes de acceder a meal.idMeal
+
+    const mostrarComentarios = async () => {
+      const comentarios = await filterComentariosPorReceta(meal.idMeal);
+      setComments(comentarios);
+    };
+
+    mostrarComentarios();
+  }, [meal]);
 
   if (!meal) {
     return (
@@ -44,6 +62,29 @@ export default function RecipeDetails({ route }) {
       }
     }
     return ingredients;
+  };
+
+  //Funciones para agregrar comentario nuevo y ver los existentes
+  const handleCommentSubmit = async () => {
+    if (!commentText.trim()) {
+      Alert.alert('No puedes enviar un comentario vacio, por favor escribe un comentario.')
+      return;
+    }
+
+    const newComment = {
+      text: commentText,
+      author: 'Usuario', // nombre del usuario que agregó el comentario
+      createdAt: serverTimestamp(),
+      id_plato: meal.idMeal // Relaciona el comentario con la receta
+    };
+
+    try {
+      await addComentario(newComment);
+      setComments([...comments, newComment]); // agregar al estado local (opcional) o se puede cambiar la lógica para que se haga una consulta en tiempo real
+      setCommentText('');
+    } catch (error) {
+      console.error('Error al agregar comentario:', error);
+    }
   };
 
   return (
@@ -88,6 +129,43 @@ export default function RecipeDetails({ route }) {
           </View>
         </>
       )}
+
+      {/*Comentarios*/}
+      <Text style={styles.sectionTitle}>Comentarios</Text>
+
+      {/*Lista de comentarios existentes*/}
+      {comments.length > 0 ? (
+        comments.map((comment, index) => (
+          <View key={index} style={styles.commentContainer}>
+            <Text style={styles.commentAuthor}>{comment.author}</Text>
+            <Text style={styles.commentText}>{comment.text}</Text>
+            <Text style={styles.commentDate}>
+              {
+                comment.createdAt
+                  ? (comment.createdAt.toDate
+                    ? comment.createdAt.toDate().toLocaleDateString()
+                    : new Date(comment.createdAt).toLocaleDateString())
+                  : "Fecha desconocida"
+              }
+            </Text>
+          </View>
+        ))
+      ) : (
+        <Text style={styles.commentsText}>No hay comentarios aún.</Text>
+      )}
+
+      {/*Crear nuevo comentario*/}
+      <TextInput
+        style={styles.commentsInput}
+        placeholder="Escribe tu comentario..."
+        value={commentText}
+        onChangeText={setCommentText}
+        multiline
+      />
+
+      <TouchableOpacity onPress={handleCommentSubmit} style={styles.commentsButton}>
+        <Text style={styles.commentsButtonText}>Enviar comentario</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -158,7 +236,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     overflow: "hidden",
-    marginBottom: 70,
+    marginBottom: 0,
   },
   video: {
     flex: 1,
@@ -168,4 +246,45 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  commentsInput: {
+    borderWidth: 2,
+    borderColor: "#ff6347",
+    borderRadius: 8,
+    padding: 8
+  },
+  commentsButton: {
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    alignItems: "center",
+    backgroundColor: "#ff6347",
+    marginBottom: 40
+  },
+  commentsButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  commentsText: {
+    marginTop: 20,
+    fontSize: 15,
+    textAlign: "justify",
+    lineHeight: 22,
+    marginVertical: 40
+  },
+  commentAuthor: {
+    fontWeight: 'bold',
+    marginBottom: 2,
+  },
+
+  commentText: {
+    marginBottom: 4,
+  },
+
+  commentDate: {
+    fontSize: 12,
+    color: '#888',
+    marginBottom: 20
+  }
 });
