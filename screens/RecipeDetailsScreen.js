@@ -23,22 +23,22 @@ export default function RecipeDetails({ route }) {
   const [commentText, setCommentText] = useState('');
   const [comments, setComments] = useState([]);
 
+
+  const mostrarComentarios = async () => {
+    const comentarios = await filterComentariosPorReceta(meal.idMeal);
+    setComments(comentarios);
+  };
   useEffect(() => {
     fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
       .then((res) => res.json())
       .then((data) => setMeal(data.meals[0]));
+    mostrarComentarios();
   }, [mealId]);
 
   useEffect(() => {
     if (!meal) return; // Asegurar que meal no sea null antes de acceder a meal.idMeal
-
-    const mostrarComentarios = async () => {
-      const comentarios = await filterComentariosPorReceta(meal.idMeal);
-      setComments(comentarios);
-    };
-
     mostrarComentarios();
-  }, [meal]);
+  }, [comments,meal]);
 
   if (!meal) {
     return (
