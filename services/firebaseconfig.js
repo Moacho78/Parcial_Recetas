@@ -1,18 +1,21 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD-Jz42fD4CXUwdyRuzyLCYk_gZ2b3xYKE",
-  authDomain: "prueba20252.firebaseapp.com",
-  projectId: "prueba20252",
-  storageBucket: "prueba20252.firebasestorage.app",
-  messagingSenderId: "524980571239",
-  appId: "1:524980571239:web:e62e42fe6285a7359118c2",
-  measurementId: "G-RR0P22RWF2",
-  databaseurl:"https://prueba20252-default-rtdb.firebaseio.com/"
+  apiKey: "AIzaSyAyIX0RcU7k_-FL3nNEKMwtrryv8d0M4f8",
+  authDomain: "gatrogo.firebaseapp.com",
+  databaseURL: "https://gatrogo-default-rtdb.firebaseio.com",
+  projectId: "gatrogo",
+  storageBucket: "gatrogo.appspot.com",
+  messagingSenderId: "205488824009",
+  appId: "1:205488824009:web:62bdc5f1076c906fd73718"
 };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
 
-export { db };
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+export { db, storage };

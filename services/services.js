@@ -1,5 +1,5 @@
 import { collection, query, where, orderBy, limit, startAfter, getDocs } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from './firebaseconfig';
 
 // Filtrado y ordenación
 const filterRecetasPublicas = async () => {
@@ -31,7 +31,7 @@ const filterRecetasPrivadas = async () => {
   const recetasRef = collection(db, 'recetas');
   const q = query(
     recetasRef,
-    where('visible' ,'==' ,'false')
+    where('visible', '==', 'false')
   );
 
   const querySnapshot = await getDocs(q);
@@ -40,31 +40,54 @@ const filterRecetasPrivadas = async () => {
   });
 
 }
+
+//Buscar receta por id
+export const getRecetaById = async (recetaId) => {
+  try {
+    const docRef = doc(db, "recetas", recetaId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+    console.log("No existe la receta con ese ID");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error al obtener la receta:", error);
+    throw error;
+
+  }
+}
+
+
+
   //COMENTARIOS SERVICES 
   export const addComentario = async (comentarioData) => {
-  try {
-    const docRef = await addDoc(collection(db, "comentarios"), comentarioData);
-    console.log("Comentario añadido con ID: ", docRef.id, "Asociado a la receta: ",comentarioData.id_plato);
-    return docRef.id;
-  } catch (e) {
-    console.error("Error añadiendo comentario: ", e);
-    throw e;
-  }
-};
+    try {
+      const docRef = await addDoc(collection(db, "comentarios"), comentarioData);
+      console.log("Comentario añadido con ID: ", docRef.id, "Asociado a la receta: ", comentarioData.id_plato);
+      return docRef.id;
+    } catch (e) {
+      console.error("Error añadiendo comentario: ", e);
+      throw e;
+    }
+  };
 
-// Filtrado y ordenación
-const filterComentariosPorReceta = async (plato_id) => {
-  const recetasRef = collection(db, 'comentarios');
-  const q = query(
-    recetasRef,
-    where('id_plato' ,'==' ,'plato_id')
-  );
+  // Filtrado y ordenación
+  const filterComentariosPorReceta = async (plato_id) => {
+    const recetasRef = collection(db, 'comentarios');
+    const q = query(
+      recetasRef,
+      where('id_plato', '==', 'plato_id')
+    );
 
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data());
-  });
-};
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, ' => ', doc.data());
+    });
+
+
+  };
 
 
 

@@ -12,7 +12,6 @@ import {
   TextInput
 } from "react-native";
 
-
 export default function RecipesScreen({ navigation }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +66,9 @@ export default function RecipesScreen({ navigation }) {
   const renderMeal = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate("RecipeDetails", { mealId: item.idMeal })}
+      onPress={() =>
+        navigation.navigate("RecipeDetails", { mealId: item.idMeal })
+      }
     >
       <Image source={{ uri: item.strMealThumb }} style={styles.image} />
       <View style={styles.overlay}>
@@ -83,10 +84,13 @@ export default function RecipesScreen({ navigation }) {
       </View>
     );
   }
+
   // Generar receta random
   const randomRecipe = async () => {
     try {
-      const response = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+      const response = await fetch(
+        "https://www.themealdb.com/api/json/v1/1/random.php"
+      );
       const data = await response.json();
 
       const meal = data.meals[0]; // ⬅️ accede al primer elemento
@@ -94,7 +98,6 @@ export default function RecipesScreen({ navigation }) {
 
       // Ahora navega cuando ya tienes el idMeal disponible
       navigation.navigate("RecipeDetails", { mealId: meal.idMeal });
-
     } catch (error) {
       console.error("Error al obtener receta aleatoria:", error);
     }
@@ -106,7 +109,10 @@ export default function RecipesScreen({ navigation }) {
         <Text style={styles.header}>Recipes</Text>
 
         <View style={styles.randomWrapper}>
-          <TouchableOpacity style={styles.randomButton} onPress={() => navigation.navigate("Favorite")}>
+          <TouchableOpacity
+            style={styles.randomButton}
+            onPress={() => navigation.navigate("Favorite")}
+          >
             <Ionicons name="star" size={18} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -126,10 +132,12 @@ export default function RecipesScreen({ navigation }) {
         <>
           <View style={styles.resultsHeader}>
             <Text style={styles.subHeader}>Resultados</Text>
-            <TouchableOpacity onPress={() => {
-              setResults([]);  // Limpia los resultados
-              setQuery('');     // Limpia la barra de búsqueda
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setResults([]); // Limpia los resultados
+                setQuery(""); // Limpia la barra de búsqueda
+              }}
+            >
               <Ionicons name="close" size={28} color="#ff6347" />
             </TouchableOpacity>
           </View>
@@ -153,9 +161,17 @@ export default function RecipesScreen({ navigation }) {
         renderItem={renderCategory}
         showsVerticalScrollIndicator={false}
       />
-      {/* FAB - Floating Action Button */}
-      <TouchableOpacity style={styles.fab} onPress={randomRecipe}>
+
+      {/* FABs */}
+      <TouchableOpacity style={styles.fabRight} onPress={randomRecipe}>
         <Ionicons name="dice" size={28} color="#fff" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.fabLeft}
+        onPress={() => navigation.navigate("CrearReceta")}
+      >
+        <Ionicons name="add" size={32} color="#fff" />
       </TouchableOpacity>
     </View>
   );
@@ -168,12 +184,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
     fontSize: 28,
@@ -182,16 +198,16 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   randomWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   randomButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#ff6347',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#ff6347",
+    justifyContent: "center",
+    alignItems: "center",
   },
   subHeader: {
     fontSize: 20,
@@ -199,17 +215,17 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   resultsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 10,
     marginBottom: 5,
   },
   closeButton: {
     fontSize: 20,
-    color: '#ff6347',
+    color: "#ff6347",
     paddingHorizontal: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   card: {
     marginBottom: 15,
@@ -253,31 +269,39 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
   },
-  randomWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
   },
   randomText: {
     marginTop: 4,
     fontSize: 12,
     fontWeight: "bold",
-    color: '#333',
+    color: "#333",
   },
-  fab: {
+  fabRight: {
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: '#ff6347', // 
+    backgroundColor: "#ff6347",
     width: 60,
     height: 60,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 }
-  }
+    elevation: 5,
+  },
+  fabLeft: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    backgroundColor: "#ff6347", 
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
 });
+
