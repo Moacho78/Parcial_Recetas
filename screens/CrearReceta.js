@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { uploadImageToCloudinary } from "../services/uploadService"; 
+import React, { useState,useEffect } from "react";
+import { uploadImageToCloudinary } from "../services/uploadService";
 import {
     View,
     TextInput,
@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { addReceta } from "../services/recetasService";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CrearReceta({ navigation }) {
     const [titulo, setTitulo] = useState("");
@@ -21,8 +22,15 @@ export default function CrearReceta({ navigation }) {
     const [visible, setVisible] = useState(true);
     const [imageUri, setImageUri] = useState(null);
     const [image, setImage] = useState(null);
-    const [uploading, setUploading] = useState(false);
+    const [userId, setUserId] = useState(null);
 
+    useEffect(() => {
+        const getUserId = async () => {
+            const id = await AsyncStorage.getItem('userId');
+            setUserId(id);
+        };
+        getUserId();
+    }, []);
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -74,8 +82,8 @@ export default function CrearReceta({ navigation }) {
                     instrucciones,
                     videoUrl,
                     visible,
-                    userId: "123abc",
-                    urlImage: url, 
+                    userId: userId,
+                    urlImage: url,
                 }
             );
 

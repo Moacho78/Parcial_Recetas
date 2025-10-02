@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   TextInput
 } from "react-native";
+import { filterRecetasPublicas } from "../services/services";
 
 export default function RecipesScreen({ navigation }) {
   const [categories, setCategories] = useState([]);
@@ -19,12 +20,31 @@ export default function RecipesScreen({ navigation }) {
   const [results, setResults] = useState([]);
   const [random, setRandom] = useState([]);
 
-  const searchMeals = () => {
+
+  // 👉 Función que busca primero en Firestore y luego en la API
+  const searchMeals = async () => {
     if (!query) return;
-    fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`)
-      .then((res) => res.json())
-      .then((data) => setResults(data.meals || []))
-      .catch((err) => console.error(err));
+
+    try {
+      // 1. Buscar en Firestore
+      const recetasFirestore = await filterRecetasPublicas(query);
+
+      if (recetasFirestore.length > 0) {
+        setResults(recetasFirestore);
+        return;
+      }
+
+      // 2. Si no hay resultados en Firestore, buscar en TheMealDB
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
+      );
+      const data = await res.json();
+
+      setResults(data.meals || []);
+    } catch (err) {
+      console.error("Error en búsqueda:", err);
+      setResults([]);
+    }
   };
 
   // Llamada al API
@@ -67,15 +87,19 @@ export default function RecipesScreen({ navigation }) {
     <TouchableOpacity
       style={styles.card}
       onPress={() =>
-        navigation.navigate("RecipeDetails", { mealId: item.idMeal })
+        navigation.navigate("RecipeDetails", { mealId: item.idMeal ?? item.id , fromFirestore: true})
       }
     >
-      <Image source={{ uri: item.strMealThumb }} style={styles.image} />
+      <Image
+        source={{ uri: item.strMealThumb ?? item.urlImage }}
+        style={styles.image}
+      />
       <View style={styles.overlay}>
-        <Text style={styles.text}>{item.strMeal}</Text>
+        <Text style={styles.text}>{item.strMeal ?? item.titulo}</Text>
       </View>
     </TouchableOpacity>
   );
+
 
   if (loading) {
     return (
@@ -144,7 +168,7 @@ export default function RecipesScreen({ navigation }) {
 
           <FlatList
             data={results}
-            keyExtractor={(item) => item.idMeal}
+            keyExtractor={(item) => item.id ?? item.idMeal}  // 👈 usa id de Firestore o idMeal de la API
             renderItem={renderMeal}
             showsVerticalScrollIndicator={false}
           />
@@ -295,7 +319,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     left: 20,
-    backgroundColor: "#ff6347", 
+    backgroundColor: "#ff6347",
     width: 60,
     height: 60,
     borderRadius: 30,

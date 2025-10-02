@@ -1,19 +1,29 @@
-import { collection, query, where, orderBy, limit, startAfter, getDocs } from 'firebase/firestore';
-import { db } from './firebaseconfig';
 
-// Filtrado y ordenación
-const filterRecetasPublicas = async () => {
-  const recetasRef = collection(db, 'recetas');
+import { db } from './firebaseconfig';
+import { collection, query, where, orderBy, startAt, endAt, getDocs } from "firebase/firestore";
+
+export const filterRecetasPublicas = async (tituloReceta) => {
+  const recetasRef = collection(db, "recetas");
+
   const q = query(
     recetasRef,
-    where('visible', '==', 'true')
+    where("visible", "==", true),
+    orderBy("titulo"),
+    startAt(tituloReceta),
+    endAt(tituloReceta + "\uf8ff") // búsqueda "like"
   );
 
   const querySnapshot = await getDocs(q);
+
+  const recetas = [];
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data());
+    recetas.push({ id: doc.id, ...doc.data() });
   });
+
+  console.log(recetas);
+  return recetas;
 };
+
 
 
 export const addReceta = async (recetaData) => {
