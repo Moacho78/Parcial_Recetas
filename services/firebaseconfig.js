@@ -1,18 +1,26 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";  // 👈 importa Firestore
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBgHrk_c81Cw7w13vROdAPH9HsxMFM5qq8",
-  authDomain: "realtime2025-2-ad6c1.firebaseapp.com",
-  databaseURL: "https://realtime2025-2-ad6c1-default-rtdb.firebaseio.com",
-  projectId: "realtime2025-2-ad6c1",
-  storageBucket: "realtime2025-2-ad6c1.firebasestorage.app",
-  messagingSenderId: "686525595459",
-  appId: "1:686525595459:web:8284eb83ac8b667011b9f6",
-  measurementId: "G-1BVLWPJ8K3"
+  apiKey: "AIzaSyAyIX0RcU7k_-FL3nNEKMwtrryv8d0M4f8",
+  authDomain: "gatrogo.firebaseapp.com",
+  databaseURL: "https://gatrogo-default-rtdb.firebaseio.com",
+  projectId: "gatrogo",
+  storageBucket: "gatrogo.appspot.com",
+  messagingSenderId: "205488824009",
+  appId: "1:205488824009:web:62bdc5f1076c906fd73718"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-export { db };
+const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+
+// Inicializar Auth
+const auth = getAuth(app);
+
+// Inicializar Firestore
+const db = getFirestore(app);  // 👈 este es el que necesitas
+
+
+// Exportar auth y métodos
+export { auth, db,signInWithEmailAndPassword, onAuthStateChanged };
