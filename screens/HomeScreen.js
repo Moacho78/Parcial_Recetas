@@ -21,7 +21,7 @@ export default function RecipesScreen({ navigation }) {
   const [random, setRandom] = useState([]);
 
 
-  // 👉 Función que busca primero en Firestore y luego en la API
+  // Función que busca primero en Firestore y luego en la API
   const searchMeals = async () => {
     if (!query) return;
 
@@ -87,7 +87,7 @@ export default function RecipesScreen({ navigation }) {
     <TouchableOpacity
       style={styles.card}
       onPress={() =>
-        navigation.navigate("RecipeDetails", { mealId: item.idMeal ?? item.id , fromFirestore: true})
+        navigation.navigate("RecipeDetails", { mealId: item.idMeal ?? item.id, fromFirestore: true })
       }
     >
       <Image
@@ -117,8 +117,8 @@ export default function RecipesScreen({ navigation }) {
       );
       const data = await response.json();
 
-      const meal = data.meals[0]; // ⬅️ accede al primer elemento
-      setRandom(meal); // ⬅️ guarda la receta en estado
+      const meal = data.meals[0]; //accede al primer elemento
+      setRandom(meal); //guarda la receta en estado
 
       // Ahora navega cuando ya tienes el idMeal disponible
       navigation.navigate("RecipeDetails", { mealId: meal.idMeal });
@@ -132,12 +132,19 @@ export default function RecipesScreen({ navigation }) {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Recipes</Text>
 
-        <View style={styles.randomWrapper}>
+        <View style={styles.buttonsRow}>
           <TouchableOpacity
             style={styles.randomButton}
             onPress={() => navigation.navigate("Favorite")}
           >
             <Ionicons name="star" size={18} color="#fff" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.privateButton}
+            onPress={() => navigation.navigate("RecetaPrivada")}
+          >
+            <Ionicons name="lock-closed" size={19} color="#fff" />
           </TouchableOpacity>
         </View>
       </View>
@@ -168,7 +175,7 @@ export default function RecipesScreen({ navigation }) {
 
           <FlatList
             data={results}
-            keyExtractor={(item) => item.id ?? item.idMeal}  // 👈 usa id de Firestore o idMeal de la API
+            keyExtractor={(item) => item.id ?? item.idMeal}  // usa id de Firestore o idMeal de la API
             renderItem={renderMeal}
             showsVerticalScrollIndicator={false}
           />
@@ -221,11 +228,23 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     textAlign: "left",
   },
-  randomWrapper: {
-    alignItems: "center",
+  buttonsRow: {
+    flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 5, // espacio entre botones
   },
   randomButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#ff6347",
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 5, // espacio entre botones
+  },
+
+  privateButton: {
     width: 40,
     height: 40,
     borderRadius: 20,

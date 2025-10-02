@@ -38,18 +38,22 @@ export const addReceta = async (recetaData) => {
 };
 
 
-const filterRecetasPrivadas = async () => {
+export const filterRecetasPrivadas = async (uid) => {
   const recetasRef = collection(db, 'recetas');
   const q = query(
     recetasRef,
-    where('visible', '==', 'false')
+    where('visible', '==', false), 
+    where('userId', '==', uid)
   );
 
   const querySnapshot = await getDocs(q);
+  const recetas = [];
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data());
+    recetas.push({id: doc.id, ...doc.data()});
   });
+  console.log("Probando servicio"+recetas);
 
+  return recetas;
 }
 
 //Buscar receta por id

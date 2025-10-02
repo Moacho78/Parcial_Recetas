@@ -50,7 +50,7 @@ export default function RecipeDetails({ route }) {
     if (!meal) return; // Asegurar que meal no sea null antes de acceder a meal.idMeal
 
     const mostrarComentarios = async () => {
-      const comentarios = await filterComentariosPorReceta(meal.idMeal);
+      const comentarios = await filterComentariosPorReceta(meal.idMeal ?? meal.id);
       setComments(comentarios);
     };
 
@@ -97,7 +97,7 @@ export default function RecipeDetails({ route }) {
       text: commentText,
       author: 'Usuario', // nombre del usuario que agregó el comentario
       createdAt: serverTimestamp(),
-      id_plato: meal.idMeal // Relaciona el comentario con la receta
+      id_plato: meal.idMeal || meal.id // Relaciona el comentario con la receta
     };
 
     try {

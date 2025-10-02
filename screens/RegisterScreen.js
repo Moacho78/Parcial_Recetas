@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 50,
-        borderColor: '#d1d5db',
+        borderColor: '#eaa9a9ff',
         borderWidth: 1,
         marginBottom: 14,
         paddingHorizontal: 12,
@@ -253,13 +253,13 @@ const styles = StyleSheet.create({
         marginLeft: 4,
     },
     button: {
-        backgroundColor: '#ef4444',
+        backgroundColor: '#ff6347',
         padding: 14,
         borderRadius: 8,
         marginTop: 10,
     },
     buttonDisabled: {
-        backgroundColor: '#93c5fd',
+        backgroundColor: '#eaa9a9ff',
     },
     buttonText: {
         color: 'white',
@@ -274,11 +274,11 @@ const styles = StyleSheet.create({
     },
     loginText: {
         fontSize: 14,
-        color: '#64748b',
+        color: '#eaa9a9ff',
     },
     loginLink: {
         fontSize: 14,
-        color: '#ef4444',
+        color: '#ff6347',
         fontWeight: '600',
     },
 });
