@@ -15,6 +15,9 @@ import { WebView } from "react-native-webview";
 import { FavoritesContext } from "../context/FavoritesContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebaseconfig";
+import { addComentario } from "../services/services";
+import { filterComentariosPorReceta } from "../services/services"
+import { serverTimestamp } from 'firebase/firestore';
 
 export default function RecipeDetails({ route }) {
   const { mealId, fromFirestore } = route.params;
@@ -52,7 +55,7 @@ export default function RecipeDetails({ route }) {
     };
 
     mostrarComentarios();
-  }, [meal]);
+  }, [meal, commentText]);
 
   if (!meal) {
     return (
@@ -232,4 +235,45 @@ const styles = StyleSheet.create({
   },
   video: { flex: 1 },
   loading: { flex: 1, justifyContent: "center", alignItems: "center" },
+  commentsInput: {
+    borderWidth: 2,
+    borderColor: "#ff6347",
+    borderRadius: 8,
+    padding: 8
+  },
+  commentsButton: {
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    alignItems: "center",
+    backgroundColor: "#ff6347",
+    marginBottom: 40
+  },
+  commentsButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  commentsText: {
+    marginTop: 20,
+    fontSize: 15,
+    textAlign: "justify",
+    lineHeight: 22,
+    marginVertical: 40
+  },
+  commentAuthor: {
+    fontWeight: 'bold',
+    marginBottom: 2,
+  },
+
+  commentText: {
+    marginBottom: 4,
+  },
+
+  commentDate: {
+    fontSize: 12,
+    color: '#888',
+    marginBottom: 20
+  }
 });
