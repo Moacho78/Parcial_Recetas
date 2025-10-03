@@ -4,11 +4,14 @@ GastroGo es una aplicación móvil desarrollada con **React Native + Expo + API 
 
 ## Características
 
-- **Explorar por categoría:** Lista de recetas filtradas por categoría.
-- **Receta aleatoria:** Muestra una receta al azar de las almacenadas.
-- **Detalle de receta:** Ingredientes y pasos de preparación en una vista clara.
-- **Favoritos:** Agrega o elimina recetas de favoritos para acceso rápido.
-- **Interfaz minimalista:** Diseño simple y fácil de usar.
+- **Explorar por categoría:** Lista de recetas filtradas por categoría.  
+- **Receta aleatoria:** Muestra una receta al azar de las almacenadas.  
+- **Detalle de receta:** Ingredientes, pasos de preparación, video tutorial y sección de comentarios.  
+- **Favoritos:** Agrega o elimina recetas de favoritos para acceso rápido.  
+- **Recetas privadas:** Gestión de recetas creadas por el usuario y almacenadas en Firestore.  
+- **Crear nueva receta:** Permite registrar recetas personalizadas, con opción de definir si serán públicas o privadas, añadir imagen y video.  
+- **Comentarios:** Los usuarios pueden dejar opiniones en las recetas públicas para fomentar la interacción.  
+
 
 ## Requisitos Previos
 
